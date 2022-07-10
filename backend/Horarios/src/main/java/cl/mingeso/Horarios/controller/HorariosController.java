@@ -2,13 +2,21 @@ package cl.mingeso.Horarios.controller;
 
 import cl.mingeso.Horarios.entity.Horarios;
 import cl.mingeso.Horarios.service.HorariosService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/horarios")
@@ -36,12 +44,12 @@ public class HorariosController {
     }
 
     @PostMapping
-    public ResponseEntity<Horarios> createHorario(@RequestBody Horarios horario) {
-        Horarios horarioNuevo = horariosService.createHorario(horario);
-        if(horarioNuevo == null) {
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<Horarios> createHorario(@Valid @RequestBody Horarios horario, BindingResult result) {
+        if(result.hasErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
         }
-        return ResponseEntity.ok(horarioNuevo);
+        Horarios horarioNuevo = horariosService.createHorario(horario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(horarioNuevo);
     }
 
     @PutMapping(value = "/{id}")
@@ -108,6 +116,25 @@ public class HorariosController {
         return ResponseEntity.ok(horarios);
     }
 
+    private String formatMessage(BindingResult result) {
+        List<Map<String, String>> errors = result.getFieldErrors().stream()
+                .map(err -> {
+                    Map<String, String> error = new HashMap<>();
+                    error.put(err.getField(), err.getDefaultMessage());
+                    return error;
+                }).collect(Collectors.toList());
+        ErrorMessage errorMessage = ErrorMessage.builder()
+                .code("01")
+                .messages(errors).build();
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = "";
+        try {
+            jsonString = mapper.writeValueAsString(errorMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jsonString;
+    }
 
 
 }

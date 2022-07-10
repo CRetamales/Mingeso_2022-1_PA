@@ -2,11 +2,20 @@ package cl.mingeso.Empleados.controller;
 
 import cl.mingeso.Empleados.entity.Empleados;
 import cl.mingeso.Empleados.service.EmpleadosService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/empleados")
@@ -34,12 +43,13 @@ public class EmpleadosController {
     }
 
     @PostMapping
-    public ResponseEntity<Empleados> createEmpleado(@RequestBody Empleados empleado) {
-        Empleados empleadoNuevo = empleadosService.createEmpleado(empleado);
-        if(empleadoNuevo == null) {
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<Empleados> createEmpleado(@Valid @RequestBody Empleados empleado, BindingResult result) {
+        if(result.hasErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
         }
-        return ResponseEntity.ok(empleadoNuevo);
+
+        Empleados empleadoNuevo = empleadosService.createEmpleado(empleado);
+        return ResponseEntity.status(HttpStatus.CREATED).body(empleadoNuevo);
     }
 
     @PutMapping(value = "/{id}")
@@ -79,4 +89,23 @@ public class EmpleadosController {
         return ResponseEntity.ok(empleados);
     }
 
+    private String formatMessage(BindingResult result) {
+        List<Map<String, String>> errors = result.getFieldErrors().stream()
+                .map(err -> {
+                    Map<String, String> error = new HashMap<>();
+                    error.put(err.getField(), err.getDefaultMessage());
+                    return error;
+                }).collect(Collectors.toList());
+        ErrorMessage errorMessage = ErrorMessage.builder()
+                .code("01")
+                .messages(errors).build();
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = "";
+        try {
+            jsonString = mapper.writeValueAsString(errorMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jsonString;
+    }
 }

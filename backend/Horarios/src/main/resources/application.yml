@@ -1,10 +1,15 @@
 #Configuracion de la base de datos
 server:
   port: 8091
+  error:
+    include-message: always
 
 
 spring:
   # Base de Datos
+  postgresql:
+    console:
+      enabled:true
   dataSource:
     #postgresql
     driverClassName: org.postgresql.Driver
@@ -21,9 +26,9 @@ spring:
     properties:
       hibernate:
         show_sql: true
-        use_sql_comments: true
+        use_sql_comments: false
         format_sql: false
 
 logging:
   pattern:
-    console: '%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:%5p} %m%n'
+    console: '%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n'

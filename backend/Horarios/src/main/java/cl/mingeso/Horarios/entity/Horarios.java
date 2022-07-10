@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.sql.Time;
 
@@ -28,18 +29,19 @@ public class Horarios {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "La fecha no puede estar vacia")
     @Column(name = "fecha")
     private Date fecha;
 
-
+    @NotNull(message = "La hora de ingreso no puede estar vacia")
     @Column(name = "hora_ingreso")
     private Time hora_ingreso;
 
-
+    @NotNull(message = "La hora de salida no puede estar vacia")
     @Column(name = "hora_salida")
     private Time hora_salida;
 
-
+    @NotNull(message = "El id del empleado no puede estar vacio")
     @Column(name = "id_empleado")
     private Long id_empleado;
 
