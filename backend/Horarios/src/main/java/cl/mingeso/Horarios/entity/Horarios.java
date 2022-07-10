@@ -38,8 +38,8 @@ public class Horarios {
     @Column(name = "hora_salida")
     private Time hora_salida;
 
-    /*
+
     @Column(name = "id_empleado")
     private Long id_empleado;
-    */
+
 }
