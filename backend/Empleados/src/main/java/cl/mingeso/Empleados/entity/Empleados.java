@@ -1,0 +1,31 @@
+package cl.mingeso.Empleados.entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Entity(name = "Empleados")
+@Table(name = "empleados")
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
+public class Empleados {
+    /** Atributos de la clase Empleados
+     * @param id - @Id - @GeneratedValue - Long - id del empleado
+     * @param nombre - @String - String - nombre del empleado
+     * @param categoria - @String - String - categoria del empleado
+     */
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "nombre")
+    private String nombre;
+
+    @Column(name = "categoria")
+    private String categoria;
+
+
+}
