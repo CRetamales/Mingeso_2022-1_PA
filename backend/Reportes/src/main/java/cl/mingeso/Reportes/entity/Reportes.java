@@ -29,6 +29,8 @@ public class Reportes {
     @Transient
     private Empleados empleado;
 
+    @Transient
+    private List<Horarios> horarios;
 
 
 

@@ -1,7 +1,11 @@
 package cl.mingeso.Reportes.service;
 
 
+import cl.mingeso.Reportes.client.EmpleadosClient;
+import cl.mingeso.Reportes.client.HorariosClient;
 import cl.mingeso.Reportes.entity.Reportes;
+import cl.mingeso.Reportes.model.Empleados;
+import cl.mingeso.Reportes.model.Horarios;
 import cl.mingeso.Reportes.repository.ReportesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +20,11 @@ public class ReportesServiceImp implements ReportesService {
     @Autowired
     ReportesRepository reportesRepository;
 
-    //@Autowired
-    //EmpleadosClient empleadosClient;
+    @Autowired
+    EmpleadosClient empleadosClient;
 
-    //@Autowired
-    //HorariosClient horariosClient;
+    @Autowired
+    HorariosClient horariosClient;
 
     @Override
     public List<Reportes> listAllReportes() {
@@ -29,7 +33,14 @@ public class ReportesServiceImp implements ReportesService {
 
     @Override
     public Reportes getReporteById(Long id) {
-        return reportesRepository.findById(id).orElse(null);
+        Reportes reporte = reportesRepository.findById(id).orElse(null);
+        if(null != reporte){
+            Empleados empleado = empleadosClient.getEmpleadoById(reporte.getId()).getBody();
+            reporte.setEmpleado(empleado);
+            List<Horarios> horarios = horariosClient.findById_empleado(empleado.getId()).getBody();
+            reporte.setHorarios(horarios);
+        }
+        return reporte;
     }
 
     @Override
