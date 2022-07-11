@@ -16,15 +16,15 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: empleados
+        - id: Empleados
           uri: lb://Empleados
           predicates:
-            - Path=/Empleados/**
+            - Path=/empleados/**
         - id: Horarios
           uri: lb://Horarios
           predicates:
-            - Path=/Horarios/**
+            - Path=/horarios/**
         - id: Reportes
           uri: lb://Reportes
           predicates:
-            - Path=/Reportes/**
+            - Path=/reportes/**
