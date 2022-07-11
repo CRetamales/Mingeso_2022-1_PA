@@ -28,7 +28,15 @@ public class ReportesServiceImp implements ReportesService {
 
     @Override
     public List<Reportes> listAllReportes() {
-        return reportesRepository.findAll();
+        List<Reportes> reportes = reportesRepository.findAll();
+        //Por cada reporte se le asigna el empleado y el horarios correspondiente
+        for(Reportes reporte : reportes){
+            Empleados empleado = empleadosClient.getEmpleadoById(reporte.getId()).getBody();
+            reporte.setEmpleado(empleado);
+            List<Horarios> horarios = horariosClient.findById_empleado(reporte.getId()).getBody();
+            reporte.setHorarios(horarios);
+        }
+        return reportes;
     }
 
     @Override
