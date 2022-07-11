@@ -16,7 +16,7 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: Empleados
+        - id: empleados
           uri: lb://Empleados
           predicates:
             - Path=/Empleados/**
