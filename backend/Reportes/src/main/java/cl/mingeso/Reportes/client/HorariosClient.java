@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-@FeignClient(name = "Horarios")
-@RequestMapping(value = "/horarios")
+@FeignClient(name = "Horarios", fallback = HorariosHystrixFallbackFactory.class)
 public interface HorariosClient {
 
-    @GetMapping(value = "/id_empleado/{id_empleado}")
+    @GetMapping(value = "/horarios/id_empleado/{id_empleado}")
     public ResponseEntity<List<Horarios>> findById_empleado(@PathVariable Long id_empleado);
 }
