@@ -1,47 +1,30 @@
 #Configuracion de la base de datos
 server:
-  port: 8093
+  port: 8080
   error:
     include-message: always
 
-
-spring:
-  # Base de Datos
-  postgresql:
-    console:
-      enabled:true
-  dataSource:
-    #postgresql
-    driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/mingeso
-    username: postgres
-    password: default
-
-  #JPA
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    properties:
-      hibernate:
-        show_sql: true
-        use_sql_comments: false
-        format_sql: false
-
-logging:
-  pattern:
-    console: '%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n'
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8099/eureka/
-    
-Feign:
-  hystrix:
-    enabled: true
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: Empleados
+          uri: lb://Empleados
+          predicates:
+            - Path=/Empleados/**
+        - id: Horarios
+          uri: lb://Horarios
+          predicates:
+            - Path=/Horarios/**
+        - id: Reportes
+          uri: lb://Reportes
+          predicates:
+            - Path=/Reportes/**
