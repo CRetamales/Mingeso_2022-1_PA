@@ -34,8 +34,15 @@ public class ReportesServiceImp implements ReportesService {
             Empleados empleado = empleadosClient.getEmpleadoById(reporte.getId()).getBody();
             reporte.setEmpleado(empleado);
             List<Horarios> horarios = horariosClient.findById_empleado(reporte.getId()).getBody();
+            //Se calcula la cantidad de horas trabajadas de cada horario del reporte
+            if (horarios != null) {
+                for (Horarios horario : horarios) {
+                    horario.setHoras_trabajadas(horario.getHoras_trabajadas());
+                }
+            }
             reporte.setHorarios(horarios);
         }
+
         return reportes;
     }
 

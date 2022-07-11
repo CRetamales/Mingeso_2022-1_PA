@@ -16,4 +16,5 @@ public interface ReportesService {
     //DELETE reporte
     public void deleteReporte(Long id);
 
+
 }
