@@ -1,6 +1,6 @@
 #Configuracion de la base de datos
 server:
-  port: 8093
+  port: 8091
   error:
     include-message: always
 

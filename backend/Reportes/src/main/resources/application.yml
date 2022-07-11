@@ -1,35 +1,6 @@
-#Configuracion de la base de datos
-server:
-  port: 8093
-  error:
-    include-message: always
-
-
 spring:
-  # Base de Datos
-  postgresql:
-    console:
-      enabled:true
-  dataSource:
-    #postgresql
-    driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/mingeso
-    username: postgres
-    password: default
-
-  #JPA
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    properties:
-      hibernate:
-        show_sql: true
-        use_sql_comments: false
-        format_sql: false
-
-logging:
-  pattern:
-    console: '%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n'
-
+  application:
+    name: Reportes
+  cloud:
+    config:
+      uri: http://localhost:8081
