@@ -8,7 +8,5 @@ spring:
       server:
         git:
           uri: https://github.com/CRetamales/Mingeso_2022-1_PA
-          username: ${GITHUB_USERNAME}
-          password: ${GITHUB_PASSWORD}
           search-paths: backend/config-data
-          host-key: ${GITHUB_HOST_KEY}
+        
